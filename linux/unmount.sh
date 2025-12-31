@@ -13,7 +13,7 @@ ENCRYPTED_PARTITION="${DEVICE}4"
 
 echo "Unmounting: $ENCRYPTED_PARTITION"
 
-if ! ./VeraCrypt_1.26.24_Linux.AppImage --text --dismount "$ENCRYPTED_PARTITION"; then
+if ! "$SCRIPT_DIR/VeraCrypt_1.26.24_Linux.AppImage" --text --dismount "$ENCRYPTED_PARTITION"; then
     echo "Error: Failed to unmount encrypted volume"
     exit 1
 fi

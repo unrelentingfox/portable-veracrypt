@@ -52,7 +52,7 @@ if mountpoint -q "$MOUNT_POINT" 2>/dev/null; then
 fi
 
 sudo mkdir -p "$MOUNT_POINT"
-if ! ./VeraCrypt_1.26.24_Linux.AppImage --text --mount "$ENCRYPTED_PARTITION" "$MOUNT_POINT" $MOUNT_OPTIONS; then
+if ! "$SCRIPT_DIR/VeraCrypt_1.26.24_Linux.AppImage" --text --mount "$ENCRYPTED_PARTITION" "$MOUNT_POINT" $MOUNT_OPTIONS; then
     echo "Error: Failed to mount encrypted volume"
     sudo rmdir "$MOUNT_POINT" 2>/dev/null
     exit 1

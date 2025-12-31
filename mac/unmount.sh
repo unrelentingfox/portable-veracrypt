@@ -10,7 +10,7 @@ source "$SCRIPT_DIR/../constants.sh"
 # Check if VeraCrypt is installed
 VERACRYPT_PATH="/Applications/VeraCrypt.app/Contents/MacOS/VeraCrypt"
 if [ ! -f "$VERACRYPT_PATH" ]; then
-    echo "Error: VeraCrypt not found. Please install from ../VeraCrypt_1.26.24_macOS.dmg"
+    echo "Error: VeraCrypt not found. Please install from $SCRIPT_DIR/VeraCrypt_1.26.24_macOS.dmg"
     exit 1
 fi
 
