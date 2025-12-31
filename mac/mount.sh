@@ -4,6 +4,9 @@
 
 set -e
 
+# Constants
+MOUNT_POINT="/Volumes/vault"
+
 # Parse arguments
 MODE="${1:-r}"
 if [[ "$MODE" != "r" && "$MODE" != "w" ]]; then
@@ -24,19 +27,23 @@ fi
 
 # Load constants
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "$SCRIPT_DIR/../constants.sh"
 
-# Check if VeraCrypt is installed
-VERACRYPT_PATH="/Applications/VeraCrypt.app/Contents/MacOS/VeraCrypt"
-if [ ! -f "$VERACRYPT_PATH" ]; then
-    echo "Error: VeraCrypt not found. Please install from $SCRIPT_DIR/VeraCrypt_1.26.24_macOS.dmg"
+# Check if VeraCrypt is installed (FUSE-T version only)
+VERACRYPT_PATH=""
+if [ -f "/opt/homebrew/bin/veracrypt" ]; then
+    VERACRYPT_PATH="/opt/homebrew/bin/veracrypt"
+elif [ -f "/usr/local/bin/veracrypt" ]; then
+    VERACRYPT_PATH="/usr/local/bin/veracrypt"
+else
+    echo "Error: VeraCrypt FUSE-T version not found. Please install:"
+    echo "  brew install --cask veracrypt-fuse-t"
     exit 1
 fi
 
-# Check and install macFUSE if needed
-if ! command -v mount_osxfuse &> /dev/null && ! command -v mount_macfuse &> /dev/null; then
-    echo "Error: macFUSE not installed. Please install macFUSE first:"
-    echo "  brew install --cask macfuse"
+# Check if FUSE-T is installed
+if ! brew list fuse-t >/dev/null 2>&1; then
+    echo "Error: FUSE-T not installed. Please install FUSE-T first:"
+    echo "  brew install --cask fuse-t"
     exit 1
 fi
 

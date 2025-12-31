@@ -4,6 +4,9 @@
 
 set -e
 
+# Constants
+MOUNT_POINT="/mnt/vault"
+
 # Parse arguments
 MODE="${1:-r}"
 if [[ "$MODE" != "r" && "$MODE" != "w" ]]; then
@@ -24,7 +27,6 @@ fi
 
 # Load constants
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "$SCRIPT_DIR/../constants.sh"
 
 # Check and install FUSE if needed
 if ! command -v fusermount &> /dev/null; then

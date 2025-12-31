@@ -3,9 +3,11 @@
 
 set -e
 
+# Constants
+MOUNT_POINT="/mnt/vault"
+
 # Load constants
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "$SCRIPT_DIR/../constants.sh"
 
 # Find the device this script is running from
 DEVICE=$(df "$SCRIPT_DIR" | tail -1 | awk '{print $1}' | sed 's/[0-9]*$//')

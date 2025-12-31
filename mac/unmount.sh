@@ -3,14 +3,21 @@
 
 set -e
 
+# Constants
+MOUNT_POINT="/Volumes/vault"
+
 # Load constants
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "$SCRIPT_DIR/../constants.sh"
 
-# Check if VeraCrypt is installed
-VERACRYPT_PATH="/Applications/VeraCrypt.app/Contents/MacOS/VeraCrypt"
-if [ ! -f "$VERACRYPT_PATH" ]; then
-    echo "Error: VeraCrypt not found. Please install from $SCRIPT_DIR/VeraCrypt_1.26.24_macOS.dmg"
+# Check if VeraCrypt is installed (brew version only)
+VERACRYPT_PATH=""
+if [ -f "/opt/homebrew/bin/veracrypt" ]; then
+    VERACRYPT_PATH="/opt/homebrew/bin/veracrypt"
+elif [ -f "/usr/local/bin/veracrypt" ]; then
+    VERACRYPT_PATH="/usr/local/bin/veracrypt"
+else
+    echo "Error: VeraCrypt not found. Please install:"
+    echo "  brew install --cask veracrypt"
     exit 1
 fi
 
