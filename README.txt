@@ -4,7 +4,7 @@ VeraCrypt Portable Drive Setup
 This drive contains:
 1. UBUNTU LIVE (6.3GB) - Bootable Ubuntu 24.04.3 LTS live system
 2. PUBLIC partition (10GB) - VeraCrypt portable apps for all platforms  
-3. ENCRYPTED volume (916GB) - VeraCrypt encrypted storage (/dev/sda4)
+3. ENCRYPTED volume (916GB) - VeraCrypt encrypted storage (partition 4)
 
 Directory Structure:
 -------------------
@@ -34,9 +34,10 @@ Linux (Ubuntu Live or other):
 -----------------------------
 1. Navigate to VeraCrypt/linux/ folder
 2. Run: ./mount.sh (ReadOnly) or ./mount.sh w (ReadWrite)
+   - Scripts automatically detect the USB drive and install FUSE if needed
 3. Enter your password when prompted
 4. Access encrypted files at /mnt/vault
-5. Run: ./unmount.sh when finished
+5. Run: ./unmount.sh when finished (cleans up mount point)
 
 macOS:
 ------
@@ -44,12 +45,13 @@ macOS:
 2. Install macFUSE: brew install --cask macfuse
 3. Navigate to VeraCrypt/mac/ folder
 4. Run: ./mount.sh (ReadOnly) or ./mount.sh w (ReadWrite)
+   - Scripts automatically detect the USB drive
 5. Enter your password when prompted
 6. Access encrypted files at /mnt/vault
-7. Run: ./unmount.sh when finished
+7. Run: ./unmount.sh when finished (cleans up mount point)
 
-MOUNTING ENCRYPTED VOLUME - All Platforms:
-==========================================
+MOUNTING ENCRYPTED VOLUME - Windows GUI:
+========================================
 
 Windows:
 --------
@@ -67,11 +69,11 @@ To Unmount:
 Troubleshooting Mount Issues:
 ----------------------------
 - Ensure USB drive is properly connected
-- Try different drive letters/slots
 - Check password is correct
-- On Linux: ensure mount point exists (mkdir /mnt/encrypted)
+- On Linux: Scripts handle FUSE installation automatically
 - On macOS: may need to allow VeraCrypt in Security preferences
 - If "device busy": ensure no files are open from encrypted volume
+- Scripts automatically detect USB drive device name
 
 Documentation:
 -------------
@@ -89,10 +91,10 @@ Security Notes:
 
 Drive Layout:
 ------------
-/dev/sdb1: Ubuntu Live System (5.9GB)
-/dev/sdb2: EFI Boot Partition (5MB)
-/dev/sdb3: PUBLIC - VeraCrypt Apps (9.3GB)
-/dev/sdb4: ENCRYPTED Volume (916GB) ← Your encrypted storage
+Partition 1: Ubuntu Live System (5.9GB)
+Partition 2: EFI Boot Partition (5MB)
+Partition 3: PUBLIC - VeraCrypt Apps (9.3GB)
+Partition 4: ENCRYPTED Volume (916GB) ← Your encrypted storage
 
 Created: December 31, 2025
 VeraCrypt Version: 1.26.24
