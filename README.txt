@@ -4,7 +4,16 @@ VeraCrypt Portable Drive Setup
 This drive contains:
 1. UBUNTU LIVE (6.3GB) - Bootable Ubuntu 24.04.3 LTS live system
 2. PUBLIC partition (10GB) - VeraCrypt portable apps for all platforms  
-3. ENCRYPTED volume (916GB) - VeraCrypt encrypted storage (/dev/sdb4)
+3. ENCRYPTED volume (916GB) - VeraCrypt encrypted storage (/dev/sda4)
+
+Directory Structure:
+-------------------
+VeraCrypt/
+├── constants.sh (shared configuration)
+├── README.txt (this file)
+├── linux/ - Linux scripts and AppImage
+├── mac/ - macOS scripts and DMG installer
+└── windows/ - Windows executable
 
 How to Boot Ubuntu Live:
 -----------------------
@@ -18,24 +27,33 @@ How to Boot Ubuntu Live:
 6. Choose "Try Ubuntu" (live mode - no installation)
 7. Ubuntu will run from RAM (changes not saved on reboot)
 
-Using VeraCrypt in Ubuntu Live:
-------------------------------
-Option 1 - Install from repos:
-- Open Terminal: Ctrl+Alt+T
-- Run: sudo apt update && sudo apt install veracrypt
-- Launch: Applications → Accessories → VeraCrypt
+Using VeraCrypt Scripts:
+========================
 
-Option 2 - Use portable apps:
-- Open Files app, navigate to this PUBLIC partition
-- Go to VeraCrypt folder
-- Run: chmod +x VeraCrypt_1.26.24_Linux.AppImage
+Linux (Ubuntu Live or other):
+-----------------------------
+1. Navigate to VeraCrypt/linux/ folder
+2. Run: ./mount.sh (ReadOnly) or ./mount.sh w (ReadWrite)
+3. Enter your password when prompted
+4. Access encrypted files at /mnt/vault
+5. Run: ./unmount.sh when finished
+
+macOS:
+------
+1. Install VeraCrypt: Double-click VeraCrypt/mac/VeraCrypt_1.26.24_macOS.dmg
+2. Install macFUSE: brew install --cask macfuse
+3. Navigate to VeraCrypt/mac/ folder
+4. Run: ./mount.sh (ReadOnly) or ./mount.sh w (ReadWrite)
+5. Enter your password when prompted
+6. Access encrypted files at /mnt/vault
+7. Run: ./unmount.sh when finished
 
 MOUNTING ENCRYPTED VOLUME - All Platforms:
 ==========================================
 
 Windows:
 --------
-1. Run VeraCrypt_1.26.24_Windows.exe from PUBLIC partition
+1. Run VeraCrypt/windows/VeraCrypt_1.26.24_Windows.exe
 2. Select an available drive letter (e.g., Z:)
 3. Click "Select Device" → choose this USB drive → select the large partition
 4. Click "Mount"
@@ -45,44 +63,6 @@ Windows:
 To Unmount:
 - Select the mounted drive in VeraCrypt
 - Click "Dismount"
-
-macOS:
-------
-1. Open VeraCrypt_1.26.24_macOS.dmg from PUBLIC partition
-2. Install or run VeraCrypt
-3. Select a slot (1-64)
-4. Click "Select Device" → choose this USB drive → select the large partition
-5. Click "Mount"
-6. Enter your password
-7. Access encrypted files in Finder under "Volumes"
-
-To Unmount:
-- Select the mounted volume in VeraCrypt
-- Click "Dismount"
-- Or right-click volume in Finder → Eject
-
-Linux (Ubuntu Live or other):
------------------------------
-1. Launch VeraCrypt (installed or portable AppImage)
-2. Select a slot (1-64)
-3. Click "Select Device" → choose /dev/sdb4 (or similar)
-4. Click "Mount"
-5. Enter your password
-6. Choose mount point (e.g., /mnt/veracrypt1)
-7. Access encrypted files at the mount point
-
-To Unmount:
-- Select the mounted volume in VeraCrypt
-- Click "Dismount"
-- Or use terminal: sudo umount /mnt/veracrypt1
-
-Command Line (Linux/macOS):
----------------------------
-Mount:
-./VeraCrypt_1.26.24_Linux.AppImage --text --mount /dev/sdb4 /mnt/encrypted
-
-Unmount:
-./VeraCrypt_1.26.24_Linux.AppImage --text --dismount /dev/sdb4
 
 Troubleshooting Mount Issues:
 ----------------------------

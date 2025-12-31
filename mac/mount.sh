@@ -1,5 +1,5 @@
 #!/bin/bash
-# Quick mount script for VeraCrypt encrypted volume
+# Quick mount script for VeraCrypt encrypted volume (macOS)
 # Usage: ./mount.sh [r|w]  (r=ReadOnly, w=ReadWrite, default=ReadOnly)
 
 set -e
@@ -24,17 +24,25 @@ fi
 
 # Load constants
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "$SCRIPT_DIR/constants.sh"
+source "$SCRIPT_DIR/../constants.sh"
 
-# Check and install FUSE if needed
-if ! command -v fusermount &> /dev/null; then
-    echo "Installing FUSE..."
-    sudo apt update && sudo apt install -y fuse libfuse2
+# Check if VeraCrypt is installed
+VERACRYPT_PATH="/Applications/VeraCrypt.app/Contents/MacOS/VeraCrypt"
+if [ ! -f "$VERACRYPT_PATH" ]; then
+    echo "Error: VeraCrypt not found. Please install from ../VeraCrypt_1.26.24_macOS.dmg"
+    exit 1
+fi
+
+# Check and install macFUSE if needed
+if ! command -v mount_osxfuse &> /dev/null && ! command -v mount_macfuse &> /dev/null; then
+    echo "Error: macFUSE not installed. Please install macFUSE first:"
+    echo "  brew install --cask macfuse"
+    exit 1
 fi
 
 # Find the device this script is running from
-DEVICE=$(df "$SCRIPT_DIR" | tail -1 | awk '{print $1}' | sed 's/[0-9]*$//')
-ENCRYPTED_PARTITION="${DEVICE}4"
+DEVICE=$(df "$SCRIPT_DIR" | tail -1 | awk '{print $1}' | sed 's/s[0-9]*$//')
+ENCRYPTED_PARTITION="${DEVICE}s4"
 
 if [ ! -e "$ENCRYPTED_PARTITION" ]; then
     echo "Error: Encrypted partition $ENCRYPTED_PARTITION not found"
@@ -46,13 +54,13 @@ echo "Encrypted partition: $ENCRYPTED_PARTITION"
 echo "Mount mode: $MODE_TEXT"
 
 # Check if already mounted
-if mountpoint -q "$MOUNT_POINT" 2>/dev/null; then
+if mount | grep -q "$MOUNT_POINT"; then
     echo "Error: $MOUNT_POINT is already mounted"
     exit 1
 fi
 
 sudo mkdir -p "$MOUNT_POINT"
-if ! ./VeraCrypt_1.26.24_Linux.AppImage --text --mount "$ENCRYPTED_PARTITION" "$MOUNT_POINT" $MOUNT_OPTIONS; then
+if ! "$VERACRYPT_PATH" --text --mount "$ENCRYPTED_PARTITION" "$MOUNT_POINT" $MOUNT_OPTIONS; then
     echo "Error: Failed to mount encrypted volume"
     sudo rmdir "$MOUNT_POINT" 2>/dev/null
     exit 1
