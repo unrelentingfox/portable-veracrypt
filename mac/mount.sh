@@ -28,24 +28,14 @@ fi
 # Load constants
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-# Check if VeraCrypt is installed (FUSE-T version only)
-VERACRYPT_PATH=""
-if [ -f "/opt/homebrew/bin/veracrypt" ]; then
-    VERACRYPT_PATH="/opt/homebrew/bin/veracrypt"
-elif [ -f "/usr/local/bin/veracrypt" ]; then
-    VERACRYPT_PATH="/usr/local/bin/veracrypt"
-else
-    echo "Error: VeraCrypt FUSE-T version not found. Please install:"
+# Check if VeraCrypt with FUSE-T is available
+if ! command -v veracrypt >/dev/null 2>&1; then
+    echo "Error: VeraCrypt not found. Please install:"
     echo "  brew install --cask veracrypt-fuse-t"
     exit 1
 fi
 
-# Check if FUSE-T is installed
-if ! brew list fuse-t >/dev/null 2>&1; then
-    echo "Error: FUSE-T not installed. Please install FUSE-T first:"
-    echo "  brew install --cask fuse-t"
-    exit 1
-fi
+VERACRYPT_PATH="$(command -v veracrypt)"
 
 # Find the device this script is running from
 DEVICE=$(df "$SCRIPT_DIR" | tail -1 | awk '{print $1}' | sed 's/s[0-9]*$//')
